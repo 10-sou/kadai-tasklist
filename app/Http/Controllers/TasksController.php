@@ -14,8 +14,8 @@ class TasksController extends Controller
     {
         $tasks = Task::all(); 
         
-        return view('tasks.index', [     // 追加
-            'tasks' => $tasks,        // 追加
+        return view('tasks.index', [    
+            'tasks' => $tasks,        
         ]); 
     }
 
@@ -26,7 +26,6 @@ class TasksController extends Controller
     {
         $task = new Task;
 
-        // メッセージ作成ビューを表示
         return view('tasks.create', [
             'task' => $task,
         ]);
@@ -37,11 +36,17 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
+        
+        $request->validate([
+            'status' => 'required|max:10',
+            'content' => 'required|max:255',
+        ]);
+        
         $task = new Task;
+        $task->status = $request->status;
         $task->content = $request->content;
         $task->save();
 
-        // トップページへリダイレクトさせる
         return redirect('/');
     }
 
@@ -50,10 +55,8 @@ class TasksController extends Controller
      */
     public function show(string $id)
     {
-        // idの値でメッセージを検索して取得
         $task = Task::findOrFail($id);
 
-        // メッセージ詳細ビューでそれを表示
         return view('tasks.show', [
             'task' => $task,
         ]);
@@ -64,11 +67,9 @@ class TasksController extends Controller
      */
     public function edit(string $id)
     {
-        // idの値でメッセージを検索して取得
         $task = TAsk::findOrFail($id);
 
-        // メッセージ編集ビューでそれを表示
-        return view('taskss.edit', [
+        return view('tasks.edit', [
             'task' => $task,
         ]);
     }
@@ -78,7 +79,13 @@ class TasksController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'status' => 'required|max:10',
+            'content' => 'required|max:255',
+        ]);
+        
         $task = Message::findOrFail($id);
+        $task->status = $request->status;
         $task->content = $request->content;
         $task->save();
 

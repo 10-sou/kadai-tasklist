@@ -56,24 +56,21 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-        
+        // バリデーション
         $request->validate([
             'status' => 'required|max:10',
-            'content' => 'required|max:255'
+            'content' => 'required|max:255',
         ]);
-        if ($task->user_id !== auth()->id()) {
-            // 他人のタスクにはアクセスできない場合、トップページにリダイレクト
-            return redirect('/');
-        }
-        
-        $task = $request->user()->tasks()->create([
-        'status' => $request->status,
-        'content' => $request->content,
-        ]);
-    
-        return redirect()->route('tasks.index');
 
-        
+        // タスクを作成
+        $task = new Task;
+        $task->status = $request->status;
+        $task->content = $request->content;
+        $task->user_id = auth()->id(); // ログイン中のユーザーIDを設定
+        $task->save();
+
+        // トップページへリダイレクト
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -85,11 +82,10 @@ class TasksController extends Controller
     
         // 他人のタスクにアクセスしようとした場合
         if ($task->user_id !== auth()->id()) {
-            // 他人のタスクにはアクセスできない場合、トップページにリダイレクト
-            return redirect('/');
+            return redirect()->route('tasks.index');
         }
         
-        $user = \Auth::user();
+        $user = auth()->user(); 
         
         // 自分のタスクの場合、詳細を表示
         return view('tasks.show', [
@@ -105,9 +101,9 @@ class TasksController extends Controller
     {
         $task = Task::findOrFail($id);
         
-        if ($task->user_id !== \Auth::id()) {
-        // 他人のタスクにはアクセスできない場合、トップページにリダイレクト
-        return redirect('/');
+        // 他人のタスクにアクセスしようとした場合
+        if ($task->user_id !== auth()->id()) {
+            return redirect()->route('tasks.index');
         }
         
         $user = \Auth::user();
@@ -128,12 +124,14 @@ class TasksController extends Controller
             'content' => 'required|max:255'
         ]);
         
-        if ($task->user_id !== auth()->id()) {
-            // 他人のタスクにはアクセスできない場合、トップページにリダイレクト
-            return redirect('/');
-        }
         
         $task = Task::findOrFail($id);
+        
+        // 他人のタスクにアクセスしようとした場合
+        if ($task->user_id !== auth()->id()) {
+            return redirect()->route('tasks.index');
+        }
+        
         $task->status = $request->status;
         $task->content = $request->content;
         $task->save();
@@ -149,9 +147,9 @@ class TasksController extends Controller
     {
         $task = Task::findOrFail($id);
         
+       // 他人のタスクにアクセスしようとした場合
         if ($task->user_id !== auth()->id()) {
-            // 他人のタスクにはアクセスできない場合、トップページにリダイレクト
-            return redirect('/');
+            return redirect()->route('tasks.index');
         }
         
         $task->delete();

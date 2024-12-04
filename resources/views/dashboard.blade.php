@@ -1,17 +1,25 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+@section('content')
+    <!--ログイン後にifの具体的内容がトップページとして表示される。ログインしていないとelseがトップページ扱いとなる-->
+    @if (Auth::check())
+        <div class="sm:grid sm:grid-cols-3 sm:gap-10">
+            <div class="sm:col-span-2">
+                {{-- 投稿フォーム --}}
+               {{-- @include('form')--}}
+                {{-- 投稿一覧 --}}
+                @include('user_id.user_id')
+            </div>
+        </div>
+    @else
+        <div class="prose hero bg-base-200 mx-auto max-w-full rounded">
+            <div class="hero-content text-center my-10">
+                <div class="max-w-md mb-10">
+                    <h2>Welcome to the tasks</h2>
+                    {{-- ユーザー登録ページへのリンク --}}
+                    <a class="btn btn-primary btn-lg normal-case" href="{{ route('register') }}">Sign up now!</a>
                 </div>
             </div>
         </div>
-    </div>
-</x-app-layout>
+    @endif
+@endsection

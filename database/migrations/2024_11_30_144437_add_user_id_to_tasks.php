@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id'); //user_idをそもそも追加しないと外部キーを設定できない。既存のtasksにもない。
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

@@ -12,7 +12,7 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
     //$proxies; //デプロイ後に変更
     //'*'; // Cloud9で動作確認するため
     /**

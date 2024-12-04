@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="prose ml-4">
+    <div class="prose ml-4">
         <h2 class="text-lg">メッセージ 一覧</h2>
     </div>
 
@@ -11,15 +11,16 @@
             <thead>
                 <tr>
                     <th>id</th>
-                    <th>ステータス</th>
                     <th>メッセージ</th>
+                    <th>ステータス</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($tasks as $task)
                 <tr>
+                    <!--lesson17:今のままでは、 showにはURLを直打ちしなければアクセスできません。そのため、 indexのViewにshowへのリンクを追加しましょう。一覧がクリックできるようになった
+                    -->
                     <td><a class="link link-hover text-info" href="{{ route('tasks.show', $task->id) }}">{{ $task->id }}</a></td>
-                    <td>{{ $task->status }}</td>
                     <td>{{ $task->content }}</td>
                 </tr>
                 @endforeach
@@ -27,6 +28,6 @@
         </table>
     @endif
     
-    <a class="btn btn-primary" href="{{ route('tasks.create') }}">新規メッセージの投稿</a> 
+    <a class="btn btn-primary" href="{{ route('tasks.create') }}">新規メッセージの投稿</a>
 
 @endsection
